@@ -1,0 +1,148 @@
+#+TITLE: Afterglow - Highlighting after Function Calls
+#+AUTHOR: Ernest M. van der Linden
+#+URL: https://github.com/ernestvanderlinden/emacs-afterglow
+
+* Introduction
+
+Afterglow is an Emacs package designed to enhance your editing experience by providing temporary highlighting for regions, lines, or custom-defined regions after specific function calls. This visual feedback tool is perfect for tracking code evaluations, cursor movements, or any changes within your buffer. It offers full control over the highlighting behavior without relying on hooks, using function advices for flexibility and performance. With Afterglow, navigating and understanding code becomes more intuitive and efficient.
+
+The default face for highlighting is `hl-line`, which offers seamless integration with Emacs' native appearance. Each trigger has its own highlight duration, face, and other properties.
+
+* Requirements
+
+Emacs 26.1 or greater.
+
+* Installation
+
+To install Afterglow, clone this repository and add the following to your Emacs configuration:
+
+#+BEGIN_SRC emacs-lisp
+;; Replace `"/path/to/emacs-afterglow"` with the actual path to where
+;; you've cloned or downloaded this package.
+(add-to-list 'load-path "/path/to/emacs-afterglow")
+(require 'afterglow)
+(afterglow-mode 1)
+
+;; Optional
+(setq afterglow-default-duration 0.5)
+(setq afterglow-default-face 'hl-line)
+
+;; Example 1:
+(afterglow-add-triggers
+ '((evil-previous-visual-line :thing line :width 5 :duration 0.2)
+   (evil-previous-visual-line :thing line :width 5 :duration 0.2)
+   (previous-line :thing line :duration 0.2)
+   (next-line :thing line :duration 0.2)
+   (eval-buffer :thing window :duration 0.2)
+   (eval-defun :thing defun :duration 0.2)
+   (eval-expression :thing sexp :duration 1)
+   (eval-last-sexp :thing sexp :duration 1)
+   (my-function :thing my-region-function :duration 0.5 
+                :face 'highlight)))
+
+;; Example 2: use let binding instead
+(let ((width 5)
+      (duration 0.3))
+  (afterglow-add-triggers
+   `((evil-previous-visual-line :thing line :width ,width
+                                :duration ,duration)
+     (evil-next-visual-line :thing line :width ,width 
+                            :duration ,duration)
+     (previous-line :thing line :duration ,duration)
+     (next-line :thing line :duration ,duration)
+     (eval-buffer :thing window :duration ,duration)
+     (eval-defun :thing defun :duration ,duration)
+     (eval-region :thing region :duration ,duration 
+                  :face (:background "green"))
+     (eval-last-sexp :thing sexp :duration ,duration))))
+#+END_SRC
+
+* Usage
+
+Afterglow is designed to be highly customizable. Here are some ways you can tailor it to fit your workflow:
+
+** Things
+
+Afterglow allows highlighting based on different 'things', including:
+
+| Thing    | Description                                                                                                                              |
+|----------+------------------------------------------------------------------------------------------------------------------------------------------|
+| Function | Implement your own function which returns a cons cell containing the beginning and end of a region, e.g., =(234 . 543)=.                 |
+| Region   | If a region is active, that region will be highlighted.                                                                                  |
+| Line     | Add a property `:width` to control the length of the line.                                                                               |
+| Window   | Highlights the current window.                                                                                                           |
+| Other    | Defined in the `thingatpt` package: symbol, list, sexp, defun, number, filename, url, email, uuid, word, sentence, whitespace, and page. |
+***  
+
+** Highlight Duration
+
+By default, highlights disappear after 1 second. Adjust this duration to your preference:
+
+#+BEGIN_SRC emacs-lisp
+(setq afterglow-default-duration 0.5) ; Highlight disappears after 0.5 seconds.
+#+END_SRC
+
+** Highlight Appearance
+
+Change the appearance of the highlight by specifying a different face:
+
+#+BEGIN_SRC emacs-lisp
+(setq afterglow-default-face 'your-custom-face) ; Use your custom face for highlighting.
+#+END_SRC
+
+Refer to Emacs' documentation `M-x describe-face` for details on creating or modifying faces.
+
+** Adding Triggers
+
+Triggers define when the highlighting should occur, based on function calls. You can add a trigger for any Emacs function, including custom ones, like so:
+
+#+BEGIN_SRC emacs-lisp
+(afterglow-add-trigger 'previous-line :thing 'line :duration 0.2)
+#+END_SRC
+
+This flexibility allows Afterglow to cater to a wide variety of use cases, enhancing your Emacs experience by providing meaningful visual cues based on your interactions.
+
+** Functions and Vars
+
+| Public Functions          |
+|---------------------------|
+| afterglow-add-trigger     |
+| afterglow-add-triggers    |
+| afterglow-mode            |
+| afterglow-remove-trigger  |
+| afterglow-remove-triggers |
+|---------------------------|
+| Public Vars               |
+|---------------------------|
+| afterglow-duration        |
+| afterglow-face            |
+| afterglow-mode-hook       |
+
+* Key Features
+
+** Easy Integration
+Designed to work seamlessly with Emacs, enhancing your editing experience without disrupting your workflow.
+** Highlight Duration
+Control how long the highlight remains visible.
+** Flexible Highlighting
+Supports highlighting lines, windows, regions, custom region functions, and `things`.
+** Fast and Friendly
+Does not use hooks and only uses advice-add on functions.
+
+* Related Packages
+
+| Package      | Description                                          |
+|--------------+------------------------------------------------------|
+| beacon-mode  | Highlights the current line when the window scrolls. |
+| hl-line-mode | Provides permanent line highlighting.                |
+
+* Contributing
+
+Contributions to Afterglow are welcome. Whether it's bug reports, feature suggestions, or code contributions, please feel free to reach out or submit a pull request.
+
+* License
+
+Afterglow is available under the MIT License. See the LICENSE file for more details.
+
+* Special Thanks
+Nicholas Vollmer and Chris Rayner, both of Melpa, who triggered me to add more features and not solely focus on evil-mode users.
