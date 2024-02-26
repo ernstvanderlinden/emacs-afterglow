@@ -8,6 +8,8 @@ Afterglow is an Emacs package designed to enhance your editing experience by pro
 
 The default face for highlighting is `hl-line`, which offers seamless integration with Emacs' native appearance. Each trigger has its own highlight duration, face, and other properties.
 
+[[file:example_video.gif]]
+
 * Requirements
 
 Emacs 26.1 or greater.
