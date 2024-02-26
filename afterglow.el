@@ -96,7 +96,7 @@
 ;;
 ;; (afterglow-add-triggers
 ;;  '((evil-previous-visual-line :thing line :width 5 :duration 0.2)
-;;    (evil-previous-visual-line :thing line :width 5 :duration 0.2)
+;;    (evil-next-visual-line :thing line :width 5 :duration 0.2)
 ;;    (previous-line :thing line :duration 0.2)
 ;;    (next-line :thing line :duration 0.2)
 ;;    (eval-buffer :thing window :duration 0.2)
@@ -174,7 +174,7 @@ Example 1:
 
 \(afterglow-add-triggers
  \='((evil-previous-visual-line :thing line :width 5 :duration 0.2)
-   (evil-previous-visual-line :thing line :width 5 :duration 0.2)
+   (evil-next-visual-line :thing line :width 5 :duration 0.2)
    (previous-line :thing line :duration 0.2)
    (next-line :thing line :duration 0.2)
    (eval-buffer :thing window :duration 0.2)
