@@ -34,7 +34,7 @@
 
 ;;; Commentary:
 
-;;Other related packages: 
+;;Other related packages:
 ;; - `beacon-mode': on window scroll line highlighting;
 ;; - `hl-line-mode': permanent line highlighting.
 ;;
@@ -45,7 +45,6 @@
 ;; (require 'afterglow)
 ;; (afterglow-mode t)
 ;; 
-;;
 ;; Things:
 ;; Afterglow allows highlighting based on different 'things', including:
 ;; - Custom Function: Implement your own function which returns a cons
@@ -63,7 +62,7 @@
 ;;
 ;; (setq afterglow-default-duration 0.5)
 ;; 
-;; Customize `afterglow-default-face' to change the highlight appearance: 
+;; Customize `afterglow-default-face' to change the highlight appearance:
 ;;
 ;; (setq afterglow-default-face 'your-custom-face)
 ;;
@@ -104,7 +103,7 @@
 ;;    (eval-defun :thing defun :duration 0.2)
 ;;    (eval-expression :thing sexp :duration 1)
 ;;    (eval-last-sexp :thing sexp :duration 1)
-;;    (my-function :thing my-region-function :duration 0.5 
+;;    (my-function :thing my-region-function :duration 0.5
 ;;                 :face 'highlight)))
 ;;
 ;; Example 2: use let binding instead
@@ -113,13 +112,13 @@
 ;;   (afterglow-add-triggers
 ;;    `((evil-previous-visual-line :thing line :width ,width
 ;;                                 :duration ,duration)
-;;      (evil-next-visual-line :thing line :width ,width 
+;;      (evil-next-visual-line :thing line :width ,width
 ;;                             :duration ,duration)
 ;;      (previous-line :thing line :duration ,duration)
 ;;      (next-line :thing line :duration ,duration)
 ;;      (eval-buffer :thing window :duration ,duration)
 ;;      (eval-defun :thing defun :duration ,duration)
-;;      (eval-region :thing region :duration ,duration 
+;;      (eval-region :thing region :duration ,duration
 ;;                   :face (:background "green"))
 ;;      (eval-last-sexp :thing sexp :duration ,duration))))
 
@@ -155,12 +154,12 @@
   (puthash fn args afterglow--triggers))
 
 (defun afterglow-add-trigger (fn &rest args)
-  "Add a trigger function FN to be advised with properties
- specified in ARGS.
+  "Add a trigger function FN to be advised with properties.
 
 Example:
-(afterglow-add-trigger \='evil-previous-visual-line 
-                       :thing \='line :width 5 :duration 0.2)"
+\(afterglow-add-trigger \='evil-previous-visual-line
+                       :thing \='line :width 5 :duration 0.2)
+Optional argument ARGS adsf."
   (afterglow--add-trigger fn args)
   (afterglow--enable))
 
@@ -173,7 +172,7 @@ properties.
 
 Example 1:
 
-(afterglow-add-triggers
+\(afterglow-add-triggers
  \='((evil-previous-visual-line :thing line :width 5 :duration 0.2)
    (evil-previous-visual-line :thing line :width 5 :duration 0.2)
    (previous-line :thing line :duration 0.2)
@@ -182,22 +181,22 @@ Example 1:
    (eval-defun :thing defun :duration 0.2)
    (eval-expression :thing sexp :duration 1)
    (eval-last-sexp :thing sexp :duration 1)
-   (my-function :thing \='my-region-function :duration 0.5 
+   (my-function :thing \='my-region-function :duration 0.5
                 :face \='highlight)))
 
 ;; Example 2: use let binding instead
-(let ((width 5)
+\(let ((width 5)
       (duration 0.3))
   (afterglow-add-triggers
    `((evil-previous-visual-line :thing line :width ,width
                                 :duration ,duration)
-     (evil-next-visual-line :thing line :width ,width 
+     (evil-next-visual-line :thing line :width ,width
                             :duration ,duration)
      (previous-line :thing line :duration ,duration)
      (next-line :thing line :duration ,duration)
      (eval-buffer :thing window :duration ,duration)
      (eval-defun :thing defun :duration ,duration)
-     (eval-region :thing region :duration ,duration 
+     (eval-region :thing region :duration ,duration
                   :face (:background \"green\"))
      (eval-last-sexp :thing sexp :duration ,duration))))"
 
@@ -208,7 +207,8 @@ Example 1:
   (afterglow--enable))
 
 (defun afterglow--remove-trigger (fn)
-  "Remove a single trigger and its associated advice."
+  "Remove a single trigger and its associated advice.
+Argument FN ."
   (let ((advice-fn-symbol (afterglow--advice-fn-symbol fn)))
     (remhash fn afterglow--triggers)
     (afterglow--advice-remove fn advice-fn-symbol)))
@@ -216,8 +216,9 @@ Example 1:
 (defun afterglow-remove-trigger (fn)
   "Remove a single trigger and its associated advice.
 
-Example: 
-(afterglow-remove-trigger \='evil-previous-visual-line)"
+Example:
+\(afterglow-remove-trigger \='evil-previous-visual-line)
+Argument FN ."
   (afterglow--remove-trigger fn))
 
 (defun afterglow-remove-triggers (fn-list)
@@ -225,11 +226,12 @@ Example:
   
 Example:
 
-(afterglow-add-triggers
+\(afterglow-add-triggers
 \='(evil-previous-visual-line
     evil-previous-visual-line
     evil-previous-line
-    evil-next-visual-line))"  
+    evil-next-visual-line))
+Argument FN-LIST ."
 
   (dolist (fn fn-list)
     (afterglow--remove-trigger fn)))
@@ -245,7 +247,7 @@ Example:
 ;;; ADVICE
 
 (defvar afterglow--advised-functions '()
-  "List of pairs (FN . ADVICE-FN-SYMBOL) for functions advised. 
+  "List of pairs (FN . ADVICE-FN-SYMBOL) for functions advised.
 We use this to cleanup advice left overs")
 
 (defun afterglow--advice-add (fn advice-fn-symbol)
@@ -260,8 +262,7 @@ We use this to cleanup advice left overs")
     (push (cons fn advice-fn-symbol) afterglow--advised-functions)))
 
 (defun afterglow--advice-remove (fn advice-fn-symbol)
-  "Remove advice from FN identified by ADVICE-FN-SYMBOL and untrack
-it, if they exist."
+  "Remove advice from FN identified by ADVICE-FN-SYMBOL and untrack."
   (when (fboundp advice-fn-symbol)
     (advice-remove fn advice-fn-symbol)
     (fmakunbound advice-fn-symbol))
@@ -320,10 +321,9 @@ UNBIND-FUNCTIONS-P, when non-nil, also unbinds the advised functions."
       (afterglow--advice-add fn (afterglow--advice-fn-symbol fn)))))
 
 (defun afterglow--disable ()
-  "Disable advising functions and remove highlights.
-(afterglow-cleanup-advices nil) ; Remove advice, don't unbind triggers
-(afterglow-cleanup-advices t) ; Remove advice and unbind triggers
-"
+  "Disable advising functions and remove highlight.
+\(afterglow-cleanup-advices nil) ; Remove advice, don't unbind triggers
+\(afterglow-cleanup-advices t) ; Remove advice and unbind triggers"
   (afterglow--remove-overlays)
   (afterglow--advice-remove-all))
 
@@ -347,7 +347,7 @@ UNBIND-FUNCTIONS-P, when non-nil, also unbinds the advised functions."
     (let ((beg nil) (end nil))
 
       ;; Which thing?
-      (cond 
+      (cond
        ;; Function?
        ((functionp thing)
         (let ((bounds (funcall thing)))
@@ -372,7 +372,7 @@ UNBIND-FUNCTIONS-P, when non-nil, also unbinds the advised functions."
        ;; Window
        ((eq thing 'window)
         (let ((win (get-buffer-window (current-buffer) t)))
-          (setq beg (window-start win) 
+          (setq beg (window-start win)
                 end (window-end win t))))
 
        ;; Default case for other things like 'word, 'sentence', etc.
@@ -386,7 +386,7 @@ UNBIND-FUNCTIONS-P, when non-nil, also unbinds the advised functions."
         (setq afterglow--temp-overlay (make-overlay beg end))
         (overlay-put afterglow--temp-overlay 'face face)
         ;; Set high priority in case a `region' has been selected
-        (overlay-put afterglow--temp-overlay 'priority 100) 
+        (overlay-put afterglow--temp-overlay 'priority 100)
 
         ;; Schedule the overlay to be automatically removed after the specified duration
         (run-with-timer duration nil
