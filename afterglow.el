@@ -125,6 +125,7 @@
 ;;; Code:
 
 (require 'thingatpt)
+(require 'subr-x)
 
 (defgroup afterglow nil
   "Customization group for afterglow."
@@ -310,6 +311,7 @@ UNBIND-FUNCTIONS-P, when non-nil, also unbinds the advised functions."
 ;;; ENABLE/DISABLE
 
 (defun afterglow--reset ()
+  "Disable and enable afterglow."
   (afterglow--disable)
   (afterglow--enable))
 
@@ -401,6 +403,7 @@ UNBIND-FUNCTIONS-P, when non-nil, also unbinds the advised functions."
 ;; UTILS
 
 (defun afterglow--current-line-empty-p ()
+  "True if the current line is empyty."
   (save-excursion
     (beginning-of-line)
     (looking-at-p "^[[:space:]]*$")))
