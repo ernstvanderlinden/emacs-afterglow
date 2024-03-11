@@ -15,8 +15,18 @@ The default face for highlighting is `hl-line`, which offers seamless integratio
 Emacs 26.1 or greater.
 
 * Installation
+The package is available on [[https://melpa.org/#/afterglow][MELPA]].
 
-To install Afterglow, clone this repository and add the following to your Emacs configuration:
+** Option 1: package.el
+
+Install `afterglow` using the following commands:
+
+#+BEGIN_SRC emacs-lisp
+(package-refresh-contents)
+(package-install 'afterglow)
+#+END_SRC
+
+Add the following to your Emacs configuration:
 
 #+BEGIN_SRC emacs-lisp
 ;; Replace `"/path/to/emacs-afterglow"` with the actual path to where
@@ -57,6 +67,61 @@ To install Afterglow, clone this repository and add the following to your Emacs 
      (eval-region :thing region :duration ,duration 
                   :face (:background "green"))
      (eval-last-sexp :thing sexp :duration ,duration))))
+#+END_SRC
+
+** Option 2: straight.el
+
+To install using `straight.el`, add this to your Emacs configuration:
+
+    #+BEGIN_SRC emacs-lisp
+    (straight-use-package 'afterglow)
+    (require 'afterglow)
+    (afterglow-mode t)
+    #+END_SRC
+
+** Option 3: use-package.el
+
+For those who prefer `use-package.el`, here is how you can set up afterglow:
+
+    #+BEGIN_SRC emacs-lisp
+    (use-package afterglow
+      :ensure t
+      :config
+      (afterglow-mode t)
+      ;; Optional customizations
+      (setq afterglow-default-duration 0.5)
+      (setq afterglow-default-face 'hl-line)
+      ;; Add triggers as needed
+      (afterglow-add-triggers
+       '((evil-previous-visual-line :thing line :width 5 :duration 0.2)
+         (evil-next-visual-line :thing line :width 5 :duration 0.2)
+         (previous-line :thing line :duration 0.2)
+         (next-line :thing line :duration 0.2)
+         (eval-buffer :thing window :duration 0.2)
+         (eval-defun :thing defun :duration 0.2)
+         (eval-expression :thing sexp :duration 1)
+         (eval-last-sexp :thing sexp :duration 1)
+         (my-function :thing my-region-function :duration 0.5
+                      :face 'highlight))))
+    #+END_SRC
+
+** Option 4: Clone
+
+Clone the `afterglow` repo:
+
+#+BEGIN_SRC shell :results code :eval no-export :exports code
+git clone https://github.com/ernstvanderlinden/emacs-afterglow.git 
+#+END_SRC
+
+add this to your init.el:
+
+#+BEGIN_SRC elisp :results code :eval no-export :exports code
+;; Replace `"/path/to/emacs-afterglow"` with the actual path to where
+;; you've cloned or downloaded this package.
+(add-to-list 'load-path "/path/to/emacs-afterglow")
+(require 'afterglow)
+
+;; Rest of your custom `afterglow` config settings
 #+END_SRC
 
 * Usage
@@ -147,4 +212,5 @@ Contributions to Afterglow are welcome. Whether it's bug reports, feature sugges
 Afterglow is available under the MIT License. See the LICENSE file for more details.
 
 * Special Thanks
+
 Nicholas Vollmer and Chris Rayner, both of Melpa, who triggered me to add more features and not solely focus on evil-mode users.

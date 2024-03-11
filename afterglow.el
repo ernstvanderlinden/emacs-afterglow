@@ -1,7 +1,7 @@
 ;;; afterglow.el --- Temporary Highlighting after Function Calls
 
 ;; Author: Ernest M. van der Linden  <hello@ernestoz.com>
-;; Version: 0.2.0
+;; Version: 0.2.1
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: highlight, line, convenience, evil
 ;; URL: https://github.com/ernestvanderlinden/emacs-afterglow
@@ -124,8 +124,9 @@
 
 ;;; Code:
 
-(require 'thingatpt)
-(require 'subr-x)
+(eval-when-compile
+  (require 'thingatpt)
+  (require 'subr-x))
 
 (defgroup afterglow nil
   "Customization group for afterglow."
