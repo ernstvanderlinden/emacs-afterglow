@@ -29,9 +29,6 @@ Install `afterglow` using the following commands:
 Add the following to your Emacs configuration:
 
 #+BEGIN_SRC emacs-lisp
-;; Replace `"/path/to/emacs-afterglow"` with the actual path to where
-;; you've cloned or downloaded this package.
-(add-to-list 'load-path "/path/to/emacs-afterglow")
 (require 'afterglow)
 (afterglow-mode 1)
 
