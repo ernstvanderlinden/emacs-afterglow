@@ -4,7 +4,7 @@
 ;; Version: 0.2.1
 ;; Package-Requires: ((emacs "26.1"))
 ;; Keywords: highlight, line, convenience, evil
-;; URL: https://github.com/ernestvanderlinden/emacs-afterglow
+;; URL: https://github.com/ernstvanderlinden/emacs-afterglow
 
 ;; This file is not part of GNU Emacs.
 
